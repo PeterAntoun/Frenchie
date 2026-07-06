@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Frenchie - Naturalisation</title>
+    <title>Frenchie — Révision naturalisation française</title>
+    <meta name="description" content="Entraînement gratuit à l'examen civique de la naturalisation française : flashcards, QCM, réponse libre et examen blanc (40 questions, 45 minutes).">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='8' height='24' fill='%232449a8'/%3E%3Crect x='8' width='8' height='24' fill='%23ffffff'/%3E%3Crect x='16' width='8' height='24' fill='%23d3313a'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -36,6 +38,15 @@
           </div>
         </section>
 
+        <div class="exam-block">
+          <div class="section-head">
+            <h3>Examen blanc</h3>
+          </div>
+          <p class="exam-meta">40 questions · 45 min · 32/40 pour réussir, comme l'examen officiel.</p>
+          <button id="startExamBtn" class="primary-action" type="button">Lancer un examen blanc</button>
+          <p id="examHistory" class="exam-meta"></p>
+        </div>
+
         <label class="field-label" for="categorySelect">Thème</label>
         <select id="categorySelect"></select>
 
@@ -45,6 +56,11 @@
           <option value="mcq">QCM</option>
           <option value="write">Réponse libre</option>
         </select>
+
+        <label class="check-row">
+          <input type="checkbox" id="dueOnly">
+          <span>Uniquement les cartes à revoir</span>
+        </label>
 
         <div class="meter-block">
           <div class="meter-label">
@@ -59,9 +75,11 @@
           <button id="resetBtn" type="button">Réinitialiser</button>
           <button id="exportBtn" type="button">Exporter</button>
         </div>
+
+        <p class="shortcuts-hint">Raccourcis : <kbd>Espace</kbd> révéler · <kbd>1</kbd>–<kbd>4</kbd> répondre · <kbd>←</kbd><kbd>→</kbd> naviguer</p>
       </aside>
 
-      <section class="play-area">
+      <section id="trainArea" class="play-area">
         <header class="topbar">
           <div>
             <p id="topicLabel" class="eyebrow"></p>
@@ -79,14 +97,18 @@
           </div>
           <p id="questionText" class="question-text"></p>
 
+          <div id="emptyDeck" class="mode-panel" hidden>
+            <p class="feedback">Aucune carte ne correspond à ce filtre. Décoche « Uniquement les cartes à revoir » ou change de thème.</p>
+          </div>
+
           <div id="flashMode" class="mode-panel">
             <button id="revealBtn" class="primary-action" type="button">Révéler la réponse</button>
             <div id="answerPanel" class="answer-panel" hidden>
               <p id="answerText"></p>
               <div class="rating-row">
-                <button class="danger" data-rating="again" type="button">À revoir</button>
-                <button class="neutral" data-rating="hard" type="button">Difficile</button>
-                <button class="success" data-rating="good" type="button">Je sais</button>
+                <button class="danger" data-rating="again" type="button">À revoir (1)</button>
+                <button class="neutral" data-rating="hard" type="button">Difficile (2)</button>
+                <button class="success" data-rating="good" type="button">Je sais (3)</button>
               </div>
             </div>
           </div>
@@ -130,8 +152,54 @@
           </div>
         </section>
       </section>
+
+      <section id="examArea" class="play-area" hidden>
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Examen blanc</p>
+            <h2 id="examCounter">Question 1 / 40</h2>
+          </div>
+          <div class="pill-row">
+            <span id="examAnsweredPill" class="pill">Répondues 0/40</span>
+            <span id="examTimer" class="pill timer">45:00</span>
+            <button id="quitExamBtn" type="button">Abandonner</button>
+          </div>
+        </header>
+
+        <article id="examCard" class="question-card">
+          <div class="card-progress">
+            <span id="examProgress"></span>
+          </div>
+          <p id="examCategory" class="eyebrow"></p>
+          <p id="examQuestion" class="question-text"></p>
+          <div id="examChoices" class="choices"></div>
+          <div class="button-row exam-nav">
+            <button id="examPrevBtn" type="button">← Précédente</button>
+            <button id="examNextBtn" class="primary-action" type="button">Suivante →</button>
+            <button id="examSubmitBtn" class="primary-action" type="button">Terminer l'examen</button>
+          </div>
+          <p id="examHint" class="feedback" aria-live="polite"></p>
+        </article>
+
+        <article id="examResults" class="question-card" hidden>
+          <div id="resultBanner" class="result-banner">
+            <span id="resultScore"></span>
+            <p id="resultVerdict"></p>
+          </div>
+          <div id="resultThemes" class="theme-table"></div>
+          <div class="section-head">
+            <h3 id="mistakesTitle">Questions à retravailler</h3>
+          </div>
+          <div id="resultMistakes" class="mistake-list"></div>
+          <div class="button-row">
+            <button id="retryExamBtn" class="primary-action" type="button">Nouvel examen blanc</button>
+            <button id="backToTrainingBtn" type="button">Retour à l'entraînement</button>
+          </div>
+        </article>
+      </section>
     </main>
 
+    <script src="data.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
