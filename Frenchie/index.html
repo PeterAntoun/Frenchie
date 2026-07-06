@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Frenchie - Naturalisation</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="side-panel">
+        <div class="brand">
+          <span class="brand-mark">RF</span>
+          <div>
+            <h1>Frenchie</h1>
+            <p>Révision naturalisation</p>
+          </div>
+        </div>
+
+        <section class="stats-grid" aria-label="Progression">
+          <div>
+            <span id="xpStat">0</span>
+            <small>XP</small>
+          </div>
+          <div>
+            <span id="streakStat">0</span>
+            <small>Série</small>
+          </div>
+          <div>
+            <span id="masteredStat">0</span>
+            <small>Maîtrisées</small>
+          </div>
+          <div>
+            <span id="accuracyStat">0%</span>
+            <small>Réussite</small>
+          </div>
+        </section>
+
+        <label class="field-label" for="categorySelect">Thème</label>
+        <select id="categorySelect"></select>
+
+        <label class="field-label" for="modeSelect">Mode</label>
+        <select id="modeSelect">
+          <option value="flash">Flashcards</option>
+          <option value="mcq">QCM</option>
+          <option value="write">Réponse libre</option>
+        </select>
+
+        <div class="meter-block">
+          <div class="meter-label">
+            <span>Deck</span>
+            <span id="deckCount">0 questions</span>
+          </div>
+          <div class="meter"><span id="masteryMeter"></span></div>
+        </div>
+
+        <div class="side-actions">
+          <button id="shuffleBtn" type="button">Mélanger</button>
+          <button id="resetBtn" type="button">Réinitialiser</button>
+          <button id="exportBtn" type="button">Exporter</button>
+        </div>
+      </aside>
+
+      <section class="play-area">
+        <header class="topbar">
+          <div>
+            <p id="topicLabel" class="eyebrow"></p>
+            <h2 id="questionCounter">Question</h2>
+          </div>
+          <div class="pill-row">
+            <span id="levelPill" class="pill">Niveau 1</span>
+            <span id="duePill" class="pill">À revoir 0</span>
+          </div>
+        </header>
+
+        <article class="question-card">
+          <div class="card-progress">
+            <span id="cardProgress"></span>
+          </div>
+          <p id="questionText" class="question-text"></p>
+
+          <div id="flashMode" class="mode-panel">
+            <button id="revealBtn" class="primary-action" type="button">Révéler la réponse</button>
+            <div id="answerPanel" class="answer-panel" hidden>
+              <p id="answerText"></p>
+              <div class="rating-row">
+                <button class="danger" data-rating="again" type="button">À revoir</button>
+                <button class="neutral" data-rating="hard" type="button">Difficile</button>
+                <button class="success" data-rating="good" type="button">Je sais</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="mcqMode" class="mode-panel" hidden>
+            <div id="choices" class="choices"></div>
+            <p id="mcqFeedback" class="feedback" aria-live="polite"></p>
+          </div>
+
+          <div id="writeMode" class="mode-panel" hidden>
+            <textarea id="writeAnswer" rows="4" placeholder="Tape ta réponse avant de vérifier"></textarea>
+            <div class="button-row">
+              <button id="checkWriteBtn" class="primary-action" type="button">Vérifier</button>
+              <button id="skipWriteBtn" type="button">Passer</button>
+            </div>
+            <div id="writeFeedback" class="answer-panel" hidden>
+              <p id="writeExpected"></p>
+              <div class="rating-row">
+                <button class="danger" data-rating="again" type="button">Faux</button>
+                <button class="success" data-rating="good" type="button">Correct</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <section class="tools-band">
+          <div class="editor">
+            <div class="section-head">
+              <h3>Réponse de la carte</h3>
+              <button id="saveAnswerBtn" type="button">Sauver</button>
+            </div>
+            <textarea id="answerEditor" rows="4"></textarea>
+          </div>
+
+          <div class="list-panel">
+            <div class="section-head">
+              <h3>Parcours</h3>
+              <span id="listSummary"></span>
+            </div>
+            <div id="questionList" class="question-list"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
