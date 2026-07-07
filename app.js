@@ -28,7 +28,7 @@ const els = {};
   "choices", "mcqFeedback", "writeAnswer", "checkWriteBtn", "skipWriteBtn",
   "writeFeedback", "writeExpected", "answerEditor", "saveAnswerBtn",
   "questionList", "listSummary", "shuffleBtn", "resetBtn", "exportBtn",
-  "trainArea", "examArea", "startExamBtn", "examHistory",
+  "trainArea", "trainCard", "examArea", "startExamBtn", "examHistory",
   "examCounter", "examAnsweredPill", "examTimer", "quitExamBtn",
   "examCard", "examProgress", "examCategory", "examQuestion", "examChoices",
   "examPrevBtn", "examNextBtn", "examSubmitBtn", "examHint",
@@ -174,8 +174,44 @@ function setup() {
 
   document.addEventListener("keydown", handleKeys);
 
+  // Tap n'importe où sur la carte pour révéler la réponse (mode flashcards).
+  els.trainCard.addEventListener("click", (event) => {
+    if (els.modeSelect.value !== "flash" || !els.answerPanel.hidden || !currentCard()) return;
+    if (event.target.closest("button, textarea, a")) return;
+    revealAnswer();
+  });
+
+  attachSwipe(els.trainCard, nextCard, prevCard);
+  attachSwipe(els.examCard, () => moveExam(1), () => moveExam(-1));
+
+  // Les panneaux repliables restent ouverts sur grand écran, fermés sur mobile.
+  const wide = window.matchMedia("(min-width: 901px)").matches;
+  document.querySelectorAll("details.collapsible").forEach((panel) => {
+    panel.open = wide;
+  });
+
   applyFilters();
   renderExamHistory();
+}
+
+// Balayage horizontal : gauche = suivant, droite = précédent.
+function attachSwipe(element, onSwipeLeft, onSwipeRight) {
+  let start = null;
+  element.addEventListener("touchstart", (event) => {
+    if (event.target.closest("textarea")) return;
+    const touch = event.changedTouches[0];
+    start = { x: touch.clientX, y: touch.clientY };
+  }, { passive: true });
+  element.addEventListener("touchend", (event) => {
+    if (!start) return;
+    const touch = event.changedTouches[0];
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    start = null;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (dx < 0) onSwipeLeft();
+    else onSwipeRight();
+  }, { passive: true });
 }
 
 function applyFilters() {
@@ -468,6 +504,7 @@ function startExam() {
 
   els.trainArea.hidden = true;
   els.examArea.hidden = false;
+  window.scrollTo(0, 0);
   els.examCard.hidden = false;
   els.examResults.hidden = true;
   els.examHint.textContent = "";
@@ -580,6 +617,7 @@ function renderExamResults(score, byTheme, mistakes, timeUp) {
 
   els.examCard.hidden = true;
   els.examResults.hidden = false;
+  window.scrollTo(0, 0);
   els.resultBanner.className = `result-banner ${passed ? "pass" : "fail"}`;
   els.resultScore.textContent = `${score} / ${total}`;
   els.resultVerdict.textContent = timeUp
@@ -638,6 +676,7 @@ function closeExam() {
   exam = null;
   els.examArea.hidden = true;
   els.trainArea.hidden = false;
+  window.scrollTo(0, 0);
   applyFilters();
 }
 

@@ -13,8 +13,12 @@ aucun build : HTML/CSS/JavaScript purs.
   de 32/40 (80 %), une seule bonne réponse parmi 4 — conforme à l'arrêté du
   10 octobre 2025
 - Résultats détaillés par thème, liste des erreurs, historique des tentatives
-- Filtre « uniquement les cartes à revoir », raccourcis clavier
-  (`1`–`4` répondre, `Espace` révéler, `←`/`→` naviguer)
+- Filtre « uniquement les cartes à revoir »
+- **Pensé pour le mobile** : toucher la carte pour révéler la réponse, balayer
+  à gauche/droite pour changer de question, question affichée en premier,
+  grandes zones tactiles, installable sur l'écran d'accueil (PWA)
+- Raccourcis clavier sur ordinateur (`1`–`4` répondre, `Espace` révéler,
+  `←`/`→` naviguer)
 - Progression sauvegardée en local (`localStorage`), export JSON
 - Réponses modifiables carte par carte (panneau « Réponse de la carte »)
 

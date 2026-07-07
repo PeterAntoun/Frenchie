@@ -2,9 +2,15 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Frenchie — Révision naturalisation française</title>
     <meta name="description" content="Entraînement gratuit à l'examen civique de la naturalisation française : flashcards, QCM, réponse libre et examen blanc (40 questions, 45 minutes).">
+    <meta name="theme-color" content="#f4f6f8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Frenchie">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-180.png">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='8' height='24' fill='%232449a8'/%3E%3Crect x='8' width='8' height='24' fill='%23ffffff'/%3E%3Crect x='16' width='8' height='24' fill='%23d3313a'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
   </head>
@@ -47,15 +53,20 @@
           <p id="examHistory" class="exam-meta"></p>
         </div>
 
-        <label class="field-label" for="categorySelect">Thème</label>
-        <select id="categorySelect"></select>
-
-        <label class="field-label" for="modeSelect">Mode</label>
-        <select id="modeSelect">
-          <option value="flash">Flashcards</option>
-          <option value="mcq">QCM</option>
-          <option value="write">Réponse libre</option>
-        </select>
+        <div class="select-row">
+          <div>
+            <label class="field-label" for="categorySelect">Thème</label>
+            <select id="categorySelect"></select>
+          </div>
+          <div>
+            <label class="field-label" for="modeSelect">Mode</label>
+            <select id="modeSelect">
+              <option value="flash">Flashcards</option>
+              <option value="mcq">QCM</option>
+              <option value="write">Réponse libre</option>
+            </select>
+          </div>
+        </div>
 
         <label class="check-row">
           <input type="checkbox" id="dueOnly">
@@ -76,7 +87,8 @@
           <button id="exportBtn" type="button">Exporter</button>
         </div>
 
-        <p class="shortcuts-hint">Raccourcis : <kbd>Espace</kbd> révéler · <kbd>1</kbd>–<kbd>4</kbd> répondre · <kbd>←</kbd><kbd>→</kbd> naviguer</p>
+        <p class="shortcuts-hint desktop-hint">Raccourcis : <kbd>Espace</kbd> révéler · <kbd>1</kbd>–<kbd>4</kbd> répondre · <kbd>←</kbd><kbd>→</kbd> naviguer</p>
+        <p class="shortcuts-hint touch-hint">Astuce : touche la carte pour révéler la réponse, balaye à gauche ou à droite pour changer de question.</p>
       </aside>
 
       <section id="trainArea" class="play-area">
@@ -91,7 +103,7 @@
           </div>
         </header>
 
-        <article class="question-card">
+        <article id="trainCard" class="question-card">
           <div class="card-progress">
             <span id="cardProgress"></span>
           </div>
@@ -106,9 +118,9 @@
             <div id="answerPanel" class="answer-panel" hidden>
               <p id="answerText"></p>
               <div class="rating-row">
-                <button class="danger" data-rating="again" type="button">À revoir (1)</button>
-                <button class="neutral" data-rating="hard" type="button">Difficile (2)</button>
-                <button class="success" data-rating="good" type="button">Je sais (3)</button>
+                <button class="danger" data-rating="again" type="button">À revoir</button>
+                <button class="neutral" data-rating="hard" type="button">Difficile</button>
+                <button class="success" data-rating="good" type="button">Je sais</button>
               </div>
             </div>
           </div>
@@ -135,21 +147,25 @@
         </article>
 
         <section class="tools-band">
-          <div class="editor">
-            <div class="section-head">
+          <details class="editor collapsible">
+            <summary class="section-head">
               <h3>Réponse de la carte</h3>
-              <button id="saveAnswerBtn" type="button">Sauver</button>
-            </div>
+              <span class="chevron" aria-hidden="true"></span>
+            </summary>
             <textarea id="answerEditor" rows="4"></textarea>
-          </div>
+            <div class="button-row">
+              <button id="saveAnswerBtn" type="button">Sauver la réponse</button>
+            </div>
+          </details>
 
-          <div class="list-panel">
-            <div class="section-head">
+          <details class="list-panel collapsible">
+            <summary class="section-head">
               <h3>Parcours</h3>
               <span id="listSummary"></span>
-            </div>
+              <span class="chevron" aria-hidden="true"></span>
+            </summary>
             <div id="questionList" class="question-list"></div>
-          </div>
+          </details>
         </section>
       </section>
 
@@ -175,7 +191,7 @@
           <div id="examChoices" class="choices"></div>
           <div class="button-row exam-nav">
             <button id="examPrevBtn" type="button">← Précédente</button>
-            <button id="examNextBtn" class="primary-action" type="button">Suivante →</button>
+            <button id="examNextBtn" type="button">Suivante →</button>
             <button id="examSubmitBtn" class="primary-action" type="button">Terminer l'examen</button>
           </div>
           <p id="examHint" class="feedback" aria-live="polite"></p>
